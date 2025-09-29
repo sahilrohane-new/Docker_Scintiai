@@ -1,0 +1,27 @@
+bcrypt
+python-multipart
+pydantic[email]
+pydantic-settings
+fastapi
+uvicorn
+sqlalchemy
+aiosqlite
+passlib
+python-jose
+pydantic
+langchain>=0.1.14
+langchain_community
+langchain-core>=0.1.33
+langchain-openai>=0.1.6
+langchain-google-genai>=0.1.5
+openai
+# crewai>=0.30.5
+google-generativeai
+tiktoken
+aiofiles
+asyncpg
+passlib[bcrypt]
+sse-starlette
+pandas
+langgraph
+networkx

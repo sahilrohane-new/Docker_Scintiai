@@ -1,0 +1,16 @@
+# Frontend Dockerfile (frontend/Dockerfile)
+FROM node:18 AS build
+
+WORKDIR /app
+COPY frontend /app
+
+# Install dependencies and build React app
+RUN npm install
+RUN npm run build
+
+# Serve via Nginx
+FROM nginx:1.23
+COPY --from=build /app/build /usr/share/nginx/html
+
+EXPOSE 3000
+CMD ["nginx", "-g", "daemon off;"]
