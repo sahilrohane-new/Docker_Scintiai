@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000", // Adjust if your FastAPI is at a different URL
+  baseURL: "https://backend-service-567693257113.europe-west4.run.app", // Adjust if your FastAPI is at a different URL
 });
 
 // Attach token to headers if present
