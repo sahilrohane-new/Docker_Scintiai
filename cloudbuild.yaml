@@ -1,73 +1,79 @@
 steps:
-  # =========================
-  # Build & Push Backend
-  # =========================
-  - name: 'gcr.io/cloud-builders/docker'
+  # Build backend image
+  - name: gcr.io/cloud-builders/docker
     args:
-      [
-        'build',
-        '-t',
-        '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/scintiai-backend:$COMMIT_SHA',
-        '-f',
-        'Dockerfile.backend',
-        '.'
-      ]
+      - build
+      - '--no-cache'
+      - '-t'
+      - ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${REPO_NAME}/backend:${COMMIT_SHA}
+      - '-f'
+      - Dockerfile.backend
+      - .
+    id: Build-Backend
 
-  - name: 'gcr.io/cloud-builders/docker'
+  # Push backend image
+  - name: gcr.io/cloud-builders/docker
     args:
-      [
-        'push',
-        '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/scintiai-backend:$COMMIT_SHA'
-      ]
+      - push
+      - ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${REPO_NAME}/backend:${COMMIT_SHA}
+    id: Push-Backend
 
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  # Deploy backend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     entrypoint: gcloud
     args:
-      [
-        'run', 'deploy', '${_BACKEND_SERVICE}',
-        '--image', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/scintiai-backend:$COMMIT_SHA',
-        '--region', '${_REGION}',
-        '--platform', 'managed',
-        '--allow-unauthenticated',
-        '--port', '8080'
-      ]
+      - run
+      - deploy
+      - backend-service
+      - --image=${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${REPO_NAME}/backend:${COMMIT_SHA}
+      - --platform=managed
+      - --region=${_DEPLOY_REGION}
+      - --quiet
+    id: Deploy-Backend
 
-  # =========================
-  # Build & Push Frontend
-  # =========================
-  - name: 'gcr.io/cloud-builders/docker'
+  # Build frontend image
+  - name: gcr.io/cloud-builders/docker
     args:
-      [
-        'build',
-        '-t',
-        '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/scintiai-frontend:$COMMIT_SHA',
-        '-f',
-        'Dockerfile.frontend',
-        '.'
-      ]
+      - build
+      - '--no-cache'
+      - '-t'
+      - ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${REPO_NAME}/frontend:${COMMIT_SHA}
+      - '-f'
+      - Dockerfile.frontend
+      - .
+    id: Build-Frontend
 
-  - name: 'gcr.io/cloud-builders/docker'
+  # Push frontend image
+  - name: gcr.io/cloud-builders/docker
     args:
-      [
-        'push',
-        '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/scintiai-frontend:$COMMIT_SHA'
-      ]
+      - push
+      - ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${REPO_NAME}/frontend:${COMMIT_SHA}
+    id: Push-Frontend
 
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  # Deploy frontend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     entrypoint: gcloud
     args:
-      [
-        'run', 'deploy', '${_FRONTEND_SERVICE}',
-        '--image', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/scintiai-frontend:$COMMIT_SHA',
-        '--region', '${_REGION}',
-        '--platform', 'managed',
-        '--allow-unauthenticated',
-        '--port', '8080'
-      ]
+      - run
+      - deploy
+      - frontend-service
+      - --image=${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${REPO_NAME}/frontend:${COMMIT_SHA}
+      - --platform=managed
+      - --region=${_DEPLOY_REGION}
+      - --quiet
+    id: Deploy-Frontend
 
 images:
-  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/scintiai-backend:$COMMIT_SHA'
-  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/scintiai-frontend:$COMMIT_SHA'
+  - ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${REPO_NAME}/backend:${COMMIT_SHA}
+  - ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${REPO_NAME}/frontend:${COMMIT_SHA}
 
 options:
+  substitutionOption: ALLOW_LOOSE
   logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _AR_PROJECT_ID: qwiklabs-gcp-02-f82b7f484a69
+  _DEPLOY_REGION: europe-west4
+  _AR_HOSTNAME: europe-west4-docker.pkg.dev
+  _AR_REPOSITORY: scintiai
+  REPO_NAME: docker_scintiai
