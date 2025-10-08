@@ -206,7 +206,7 @@ export default function LLMSettings() {
                           displayEmpty
                         >
                           <MenuItem value="models/gemini-pro-latest">models/gemini-pro-latest</MenuItem>
-                        </Select>
+                        
                         </Select>
                       )
                     ) : (
