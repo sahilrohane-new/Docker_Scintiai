@@ -194,15 +194,19 @@ export default function LLMSettings() {
                         /* Gemini placeholder dropdown */
                         <Select
                           key={field}
-                          name={field}
-                          value=""
+                          name="MODEL_NAME"
+                          value={formData.MODEL_NAME || ""}
+                          onChange={(e) =>
+                            setFormData((p) => ({
+                              ...p,
+                              MODEL_NAME: e.target.value,
+                            }))
+                          }
                           fullWidth
                           displayEmpty
-                          disabled
                         >
-                          <MenuItem value="">
-                            No models available
-                          </MenuItem>
+                          <MenuItem value="models/gemini-pro-latest">models/gemini-pro-latest</MenuItem>
+                        </Select>
                         </Select>
                       )
                     ) : (
