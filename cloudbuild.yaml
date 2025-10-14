@@ -72,7 +72,7 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 substitutions:
-  _AR_PROJECT_ID: qwiklabs-gcp-04-695631e8c5e7
+  _AR_PROJECT_ID: qwiklabs-gcp-03-35138c66db75
   _DEPLOY_REGION: us-west1
   _AR_HOSTNAME: us-west1-docker.pkg.dev
   _AR_REPOSITORY: scintiai
