@@ -15,7 +15,7 @@ def create_app() -> FastAPI:
     # Allow frontend (React) to access APIs on Cloud Run
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["https://frontend-service-625719786605.us-central1.run.app"],
+        allow_origins=["https://frontend-service-795288902530.us-west1.run.app"],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
